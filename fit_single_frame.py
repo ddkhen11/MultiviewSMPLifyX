@@ -465,7 +465,10 @@ def fit_single_frame(img_list,
             pickle.dump(results[min_idx]['result'], result_file, protocol=2)
 
     if save_meshes or visualize:
-        model_output = body_model(return_verts=True, body_pose=torch.from_numpy(result['body_pose'][:, 3:]).cuda())
+        if use_cuda:
+            model_output = body_model(return_verts=True, body_pose=torch.from_numpy(result['body_pose'][:, 3:]).cuda())
+        else:
+            model_output = body_model(return_verts=True, body_pose=torch.from_numpy(result['body_pose'][:, 3:]))
         vertices = model_output.vertices.detach().cpu().numpy().squeeze()
 
         # test projection
