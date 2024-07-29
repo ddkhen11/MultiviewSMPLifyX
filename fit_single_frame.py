@@ -471,6 +471,10 @@ def fit_single_frame(img_list,
             model_output = body_model(return_verts=True, body_pose=torch.from_numpy(result['body_pose'][:, 3:]))
         vertices = model_output.vertices.detach().cpu().numpy().squeeze()
 
+        joints = model_output.joints.detach().cpu().numpy().squeeze()
+        joints_path = os.path.join(os.path.split(mesh_fn)[0], "joints.npy")
+        np.save(joints_path, joints)
+
         # test projection
         global_trans = global_body_translation.detach().cpu().numpy().squeeze()
         body_scale = body_scale.detach().cpu().numpy().squeeze()
